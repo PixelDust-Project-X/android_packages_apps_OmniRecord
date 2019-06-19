@@ -40,6 +40,9 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.media.app.NotificationCompat.MediaStyle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -284,8 +287,10 @@ class GlobalScreenRecord {
                 mNotifContent = mNotifContent;
         }
         // Display a notification
-        Notification.Builder builder = new Notification.Builder(mContext, SCREENRECORDS)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, SCREENRECORDS)
                 .setTicker(r.getString(R.string.screenrecord_notif_ticker))
+                .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
+                        .setShowActionsInCompactView(1,0,2))
                 .setContentTitle(mNotifContent)
                 .setSmallIcon(R.drawable.ic_capture_video)
                 .setWhen(mRecordingStartTime)
@@ -310,16 +315,16 @@ class GlobalScreenRecord {
         boolean showTouches = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.SHOW_TOUCHES, 0) != 0;
         int togglePointerIconId = showTouches ?
-                R.drawable.ic_pointer_off :
-                R.drawable.ic_pointer_on;
+                R.drawable.ic_pointer_on :
+                R.drawable.ic_pointer_off;
         int togglePointerStringId = showTouches ?
-                R.string.screenrecord_notif_pointer_off :
-                R.string.screenrecord_notif_pointer_on;
+                R.string.screenrecord_notif_pointer_on :
+                R.string.screenrecord_notif_pointer_off;
         int hideHintStringId = mHintShowing ?
                 R.string.screenrecord_hide_hint :
                 R.string.screenrecord_show_hint;
         builder
-                .addAction(com.android.internal.R.drawable.ic_media_stop,
+                .addAction(R.drawable.ic_stop,
                         r.getString(R.string.screenrecord_notif_stop), stopPendIntent)
                 .addAction(togglePointerIconId,
                         r.getString(togglePointerStringId), pointerPendIntent)
